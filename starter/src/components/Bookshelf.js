@@ -1,7 +1,7 @@
 import React from "react";
 import Book from "./Book";
 
-export default function Bookshelf({ title, books }) {
+export default function Bookshelf({ title, books, onUpdateBook }) {
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{title}</h2>
@@ -10,7 +10,7 @@ export default function Bookshelf({ title, books }) {
           {books.map((book) => {
             return (
               <li key={book.id}>
-                <Book book={book} />
+                <Book book={book} onUpdateBook={onUpdateBook} />
               </li>
             );
           })}

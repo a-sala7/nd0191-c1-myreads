@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { search, getAll } from "../BooksAPI";
+import { search } from "../BooksAPI";
 import Book from "./Book";
 
-export default function Search() {
-  const [myBooks, setMyBooks] = useState([]);
+export default function Search({ myBooks, onUpdateBook }) {
   const [query, setQuery] = useState("");
   const [resultBooks, setResultBooks] = useState([]);
-
-  //on page load
-  useEffect(() => {
-    getAll().then((res) => setMyBooks(res));
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (query.trim() === "") {
+    if (query === "" || query.trim() === "") {
+      setResultBooks([]);
       return;
     }
-    search(query, 10).then((res) => setResultBooks(res));
+    setIsLoading(true);
+    search(query, 10).then((res) => {
+      setResultBooks(res);
+      setIsLoading(false);
+    });
   }, [query]);
 
   return (
@@ -36,21 +36,35 @@ export default function Search() {
         </div>
       </div>
       <div className="search-books-results">
-        {resultBooks.length > 0 && (
+        {!isLoading && resultBooks.length > 0 ? (
           <ol className="books-grid">
             {resultBooks.map((b) => {
-              let matchingBooks = myBooks.filter((myB) => myB.id === b.id);
-              if (matchingBooks.length) {
-                b.shelf = matchingBooks[0].shelf;
+              let foundBooks = myBooks.filter((myB) => myB.id === b.id);
+              if (foundBooks.length > 0) {
+                let editedBook = b;
+                editedBook.shelf = foundBooks[0].shelf;
+                return (
+                  <li key={b.id}>
+                    <Book book={editedBook} onUpdateBook={onUpdateBook} />
+                  </li>
+                );
+              } else {
+                b.shelf = undefined;
+                return (
+                  <li key={b.id}>
+                    <Book book={b} onUpdateBook={onUpdateBook} />
+                  </li>
+                );
               }
-              return (
-                <li key={b.id}>
-                  <Book book={b} />
-                </li>
-              );
             })}
           </ol>
+        ) : (
+          !isLoading &&
+          query.length > 0 && (
+            <p style={{ textAlign: "center" }}>Nothing found.</p>
+          )
         )}
+        {isLoading && <p style={{ textAlign: "center" }}>Loading...</p>}
       </div>
     </div>
   );

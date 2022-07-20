@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-export default function Book({ book }) {
+export default function Book({ book, onUpdateBook }) {
   const [height, setHeight] = useState("0px");
   useEffect(() => {
     if (book.imageLinks === undefined) {
@@ -19,6 +19,10 @@ export default function Book({ book }) {
     };
   }, [book.imageLinks]);
 
+  const handleUpdateBook = (e) => {
+    onUpdateBook(book, e.target.value);
+  };
+
   return (
     <div className="book">
       <div className="book-top">
@@ -34,15 +38,14 @@ export default function Book({ book }) {
           }}
         ></div>
         <div className="book-shelf-changer">
-          <select value={book.shelf !== undefined ? book.shelf : "none"}>
+          <select
+            value={book.shelf !== undefined ? book.shelf : "none"}
+            onChange={handleUpdateBook}
+          >
             {book.shelf === undefined ? (
-              <option value="none" disabled>
-                Add to...
-              </option>
+              <option disabled>Add to...</option>
             ) : (
-              <option value="none" disabled>
-                Move to...
-              </option>
+              <option disabled>Move to...</option>
             )}
             <option value="currentlyReading">Currently Reading</option>
             <option value="wantToRead">Want to Read</option>

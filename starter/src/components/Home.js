@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Bookshelf from "./Bookshelf";
-import { getAll } from "../BooksAPI";
 
-export default function Home() {
-  const [books, setBooks] = useState([]);
-  useEffect(() => {
-    getAll().then((res) => {
-      setBooks(res);
-    });
-  }, []);
+export default function Home({ books, onUpdateBook }) {
+  const shelves = [
+    {
+      id: "currentlyReading",
+      title: "Currently Reading",
+    },
+    {
+      id: "wantToRead",
+      title: "Want to Read",
+    },
+    {
+      id: "read",
+      title: "Read",
+    },
+  ];
+
   return (
     <div className="list-books">
       <div className="list-books-title">
@@ -20,18 +27,16 @@ export default function Home() {
           <h3 style={{ textAlign: "center", marginTop: "25px" }}>Loading...</h3>
         ) : (
           <div>
-            <Bookshelf
-              title="Currently Reading"
-              books={books.filter((b) => b.shelf === "currentlyReading")}
-            />
-            <Bookshelf
-              title="Want to Read"
-              books={books.filter((b) => b.shelf === "wantToRead")}
-            />
-            <Bookshelf
-              title="Read"
-              books={books.filter((b) => b.shelf === "read")}
-            />
+            {shelves.map((shelf) => {
+              return (
+                <Bookshelf
+                  key={shelf.id}
+                  title={shelf.title}
+                  books={books.filter((b) => b.shelf === shelf.id)}
+                  onUpdateBook={onUpdateBook}
+                />
+              );
+            })}
           </div>
         )}
       </div>
