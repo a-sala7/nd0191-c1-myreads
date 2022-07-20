@@ -13,9 +13,9 @@ export default function Book({ book }) {
     img.src = book.imageLinks.thumbnail;
 
     return () => {
-      img.removeEventListener("load", () => {});
+      img.removeEventListener("load", null);
     };
-  }, []);
+  }, [book.imageLinks.thumbnail]);
 
   return (
     <div className="book">
@@ -24,10 +24,9 @@ export default function Book({ book }) {
           className="book-cover"
           style={{
             backgroundImage: `url("${book.imageLinks.thumbnail}")`,
+            //width is always 128px so we just hardcode it
             width: "128px",
             height: height,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
           }}
         ></div>
         <div className="book-shelf-changer">
