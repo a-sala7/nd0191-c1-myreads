@@ -8,7 +8,11 @@ export default function Bookshelf({ title, books }) {
       <div className="bookshelf-books">
         <ol className="books-grid">
           {books.map((book) => {
-            <Book book={book} />;
+            return (
+              <li key={book.id}>
+                <Book book={book} />
+              </li>
+            );
           })}
         </ol>
       </div>

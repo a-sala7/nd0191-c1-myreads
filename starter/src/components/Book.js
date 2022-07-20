@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useState } from "react";
 
 export default function Book({ book }) {
+  const [height, setHeight] = useState("0px");
+
+  useEffect(() => {
+    const img = new Image();
+    img.addEventListener("load", () => {
+      const str = img.naturalHeight.toString() + "px";
+      setHeight(str);
+    });
+    img.src = book.imageLinks.thumbnail;
+
+    return () => {
+      img.removeEventListener("load", () => {});
+    };
+  }, []);
+
   return (
     <div className="book">
       <div className="book-top">
@@ -8,8 +24,8 @@ export default function Book({ book }) {
           className="book-cover"
           style={{
             backgroundImage: `url("${book.imageLinks.thumbnail}")`,
-            width: "100%",
-            height: "100%",
+            width: "128px",
+            height: height,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
           }}
