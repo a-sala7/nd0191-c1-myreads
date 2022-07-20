@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Bookshelf from "./Bookshelf";
 
-export default function Home({ books, onUpdateBook }) {
+export default function Home({ books, onUpdateBook, loading }) {
   const shelves = [
     {
       id: "currentlyReading",
@@ -23,8 +23,8 @@ export default function Home({ books, onUpdateBook }) {
         <h1>MyReads</h1>
       </div>
       <div className="list-books-content">
-        {books.length === 0 ? (
-          <h3 style={{ textAlign: "center", marginTop: "25px" }}>Loading...</h3>
+        {loading ? (
+          <p style={{ textAlign: "center", marginTop: "25px" }}>Loading...</p>
         ) : (
           <div>
             {shelves.map((shelf) => {

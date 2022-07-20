@@ -8,10 +8,13 @@ import { useState, useEffect } from "react";
 
 function App() {
   const [books, setBooks] = useState([]);
+  const [booksLoading, setBooksLoading] = useState(false);
 
   const getBooks = () => {
+    setBooksLoading(true);
     getAll().then((res) => {
       setBooks(res);
+      setBooksLoading(false);
     });
   };
 
@@ -31,7 +34,13 @@ function App() {
         <Route
           exact
           path="/"
-          element={<Home books={books} onUpdateBook={updateBook} />}
+          element={
+            <Home
+              books={books}
+              onUpdateBook={updateBook}
+              loading={booksLoading}
+            />
+          }
         />
         <Route
           exact
