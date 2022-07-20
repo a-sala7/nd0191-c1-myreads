@@ -3,8 +3,10 @@ import { useState } from "react";
 
 export default function Book({ book }) {
   const [height, setHeight] = useState("0px");
-
   useEffect(() => {
+    if (book.imageLinks === undefined) {
+      return;
+    }
     const img = new Image();
     img.addEventListener("load", () => {
       const str = img.naturalHeight.toString() + "px";
@@ -15,7 +17,7 @@ export default function Book({ book }) {
     return () => {
       img.removeEventListener("load", null);
     };
-  }, [book.imageLinks.thumbnail]);
+  }, [book.imageLinks]);
 
   return (
     <div className="book">
@@ -23,15 +25,17 @@ export default function Book({ book }) {
         <div
           className="book-cover"
           style={{
-            backgroundImage: `url("${book.imageLinks.thumbnail}")`,
+            backgroundImage: `Url("${
+              book.imageLinks !== undefined ? book.imageLinks.thumbnail : "none"
+            }")`,
             //width is always 128px so we just hardcode it
             width: "128px",
             height: height,
           }}
         ></div>
         <div className="book-shelf-changer">
-          <select value={book.shelf}>
-            {book.shelf === null ? (
+          <select value={book.shelf !== undefined ? book.shelf : "none"}>
+            {book.shelf === undefined ? (
               <option value="none" disabled>
                 Add to...
               </option>
@@ -47,8 +51,13 @@ export default function Book({ book }) {
           </select>
         </div>
       </div>
-      <div className="book-title">{book.title}</div>
-      <div className="book-authors">{book.authors.join(", ")}</div>
+      <div className="book-title">
+        {book.title}
+        {book.subtitle && `: ${book.subtitle}`}
+      </div>
+      {book.authors !== undefined && (
+        <div className="book-authors">{book.authors.join(", ")}</div>
+      )}
     </div>
   );
 }
