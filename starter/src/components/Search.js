@@ -1,25 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { search } from "../BooksAPI";
 import Book from "./Book";
 import PropTypes from "prop-types";
+import debounce from "lodash.debounce";
 
 export default function Search({ myBooks, onUpdateBook }) {
   const [query, setQuery] = useState("");
   const [resultBooks, setResultBooks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
+
+  const debouncedSearch = useCallback( // eslint-disable-line react-hooks/exhaustive-deps
+    debounce((q) => setSearchVal(q), 750),
+    []
+  );
+
+  const handleChange = (e) => {
+    const q = e.target.value;
+    setQuery(q);
+    debouncedSearch(q);
+  };
 
   useEffect(() => {
-    if (query === "" || query.trim() === "") {
+    //also prevents request and error on initial page load
+    if (searchVal === "" || searchVal.trim() === "") {
       setResultBooks([]);
       return;
     }
     setIsLoading(true);
-    search(query, 10).then((res) => {
+    search(searchVal, 10).then((res) => {
       setResultBooks(res);
       setIsLoading(false);
     });
-  }, [query]);
+  }, [searchVal]);
 
   return (
     <div className="search-books">
@@ -32,7 +46,7 @@ export default function Search({ myBooks, onUpdateBook }) {
             type="text"
             placeholder="Search by title, author, or ISBN"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleChange}
           />
         </div>
       </div>
@@ -61,7 +75,7 @@ export default function Search({ myBooks, onUpdateBook }) {
           </ol>
         ) : (
           !isLoading &&
-          query.length > 0 && (
+          searchVal.trim().length > 0 && (
             <p style={{ textAlign: "center" }}>Nothing found.</p>
           )
         )}

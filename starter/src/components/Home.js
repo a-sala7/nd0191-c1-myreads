@@ -1,23 +1,9 @@
 import { Link } from "react-router-dom";
 import Bookshelf from "./Bookshelf";
 import PropTypes from "prop-types";
+import SHELVES from "../shelves";
 
 export default function Home({ books, onUpdateBook, loading }) {
-  const shelves = [
-    {
-      id: "currentlyReading",
-      title: "Currently Reading",
-    },
-    {
-      id: "wantToRead",
-      title: "Want to Read",
-    },
-    {
-      id: "read",
-      title: "Read",
-    },
-  ];
-
   return (
     <div className="list-books">
       <div className="list-books-title">
@@ -28,14 +14,13 @@ export default function Home({ books, onUpdateBook, loading }) {
           <p style={{ textAlign: "center", marginTop: "25px" }}>Loading...</p>
         ) : (
           <div>
-            {shelves.map((shelf) => {
+            {SHELVES.map((shelf) => {
               return (
                 <Bookshelf
                   key={shelf.id}
                   title={shelf.title}
                   books={books.filter((b) => b.shelf === shelf.id)}
                   onUpdateBook={onUpdateBook}
-                  shelves={shelves}
                 />
               );
             })}

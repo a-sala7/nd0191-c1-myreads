@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import SHELVES from "../shelves";
 
-//I passed existing shelves const as a prop from
-// Home.js instead of making a different one here
-export default function Book({ book, onUpdateBook, shelves }) {
+export default function Book({ book, onUpdateBook }) {
   const [height, setHeight] = useState("0px");
   useEffect(() => {
     if (book.imageLinks === undefined) {
@@ -50,8 +49,12 @@ export default function Book({ book, onUpdateBook, shelves }) {
             ) : (
               <option disabled>Move to...</option>
             )}
-            {shelves.map((s) => {
-              return <option value={s.id}>{s.title}</option>;
+            {SHELVES.map((s) => {
+              return (
+                <option key={s.id} value={s.id}>
+                  {s.title}
+                </option>
+              );
             })}
             <option value="none">None</option>
           </select>
@@ -71,5 +74,4 @@ export default function Book({ book, onUpdateBook, shelves }) {
 Book.propTypes = {
   book: PropTypes.object.isRequired,
   onUpdateBook: PropTypes.func.isRequired,
-  shelves: PropTypes.array.isRequired,
 };
