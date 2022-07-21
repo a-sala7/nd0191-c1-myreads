@@ -24,7 +24,14 @@ function App() {
 
   const updateBook = (book, shelf) => {
     update(book, shelf).then(() => {
-      getBooks();
+      if (shelf === "none") {
+        setBooks(books.filter((b) => b.id !== book.id));
+        return;
+      }
+      let updatedBook = book;
+      updatedBook.shelf = shelf;
+      let filteredBooks = books.filter((b) => b.id !== book.id);
+      setBooks([...filteredBooks, updatedBook]);
     });
   };
 
