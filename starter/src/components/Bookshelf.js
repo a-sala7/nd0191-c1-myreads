@@ -2,7 +2,9 @@ import React from "react";
 import Book from "./Book";
 import PropTypes from "prop-types";
 
-export default function Bookshelf({ title, books, onUpdateBook }) {
+//shelves will be passed to Book component
+// to be used in the dropdown
+export default function Bookshelf({ title, books, onUpdateBook, shelves }) {
   return (
     <div className="bookshelf">
       <h2 className="bookshelf-title">{title}</h2>
@@ -11,7 +13,11 @@ export default function Bookshelf({ title, books, onUpdateBook }) {
           {books.map((book) => {
             return (
               <li key={book.id}>
-                <Book book={book} onUpdateBook={onUpdateBook} />
+                <Book
+                  book={book}
+                  onUpdateBook={onUpdateBook}
+                  shelves={shelves}
+                />
               </li>
             );
           })}
@@ -25,4 +31,5 @@ Bookshelf.propTypes = {
   title: PropTypes.string.isRequired,
   books: PropTypes.array.isRequired,
   onUpdateBook: PropTypes.func.isRequired,
+  shelves: PropTypes.array.isRequired,
 };

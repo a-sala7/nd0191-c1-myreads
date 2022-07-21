@@ -35,6 +35,7 @@ export default function Home({ books, onUpdateBook, loading }) {
                   title={shelf.title}
                   books={books.filter((b) => b.shelf === shelf.id)}
                   onUpdateBook={onUpdateBook}
+                  shelves={shelves}
                 />
               );
             })}
