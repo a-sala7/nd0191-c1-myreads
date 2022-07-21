@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { search } from "../BooksAPI";
 import Book from "./Book";
+import PropTypes from "prop-types";
 
 export default function Search({ myBooks, onUpdateBook }) {
   const [query, setQuery] = useState("");
@@ -69,3 +70,8 @@ export default function Search({ myBooks, onUpdateBook }) {
     </div>
   );
 }
+
+Search.propTypes = {
+  myBooks: PropTypes.array.isRequired,
+  onUpdateBook: PropTypes.func.isRequired,
+};

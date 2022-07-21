@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 export default function Book({ book, onUpdateBook }) {
   const [height, setHeight] = useState("0px");
@@ -64,3 +65,8 @@ export default function Book({ book, onUpdateBook }) {
     </div>
   );
 }
+
+Book.propTypes = {
+  book: PropTypes.object.isRequired,
+  onUpdateBook: PropTypes.func.isRequired,
+};
